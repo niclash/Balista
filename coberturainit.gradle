@@ -1,0 +1,11 @@
+
+buildscript {
+  repositories {
+    mavenCentral()
+    mavenRepo url: "https://raw.github.com/valkolovos/gradle_cobertura/master/repo/"
+  }
+  dependencies {
+    classpath "gradle_cobertura:gradle_cobertura:1.2.1"
+  }
+}
+apply plugin: com.orbitz.gradle.cobertura.CoberturaPlugin

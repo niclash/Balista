@@ -1,0 +1,56 @@
+group = "io.bali"
+version = "0.2.1"
+
+apply plugin: 'idea'
+
+
+allprojects {
+  version = rootProject.version
+  apply plugin: 'java'
+  apply plugin: 'idea'
+  apply plugin: 'maven'
+  apply plugin: 'project-report'
+  buildscript {
+    apply from: "$rootProject.projectDir.absolutePath/coberturainit.gradle"
+  }
+
+  configurations {
+    provided
+  }
+
+  sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+  }
+
+  repositories {
+    mavenCentral()
+    mavenLocal()
+    mavenRepo name: 'restlet-repo', url: 'http://maven.restlet.org'
+  }
+
+  dependencies {
+    compile "org.slf4j:slf4j-api:1.6.4"
+    testCompile "junit:junit:4.8.2"
+    testCompile "org.hamcrest:hamcrest-all:1.3"
+  }
+
+  idea.module.iml {
+    whenMerged { module ->
+      module.dependencies*.exported = true
+    }
+  }
+
+}
+
+idea.project.ipr {
+  withXml { provider ->
+    provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = "1.4"
+}
+
